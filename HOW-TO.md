@@ -73,7 +73,30 @@ supplied per session and never persisted.
     immediately after each session, and a new one generated for the
     next round of changes.
 
-## Notes and gotchas encountered
+## Required PAT permissions
+
+A token that's missing a scope fails at a specific, predictable step
+rather than up front — so it's worth granting all three from the start:
+
+| Permission | Needed for | Symptom if missing |
+|---|---|---|
+| `Contents: Read and write` | Cloning, committing, pushing branches | `git push` / clone fails with 403 or "write access not granted" |
+| `Pull requests: Read and write` | Opening PRs via the GitHub API | Push succeeds, but PR creation returns `403 Resource not accessible by personal access token` |
+| `Administration: Read and write` | Creating a brand-new repository via the API | Only needed if Claude (not the user) creates the repo itself |
+
+Fine-grained tokens let you scope these per-repository; classic tokens
+only offer the blanket `repo` scope (all repos, all three permissions
+above bundled together).
+
+## Updating token permissions on an existing token
+
+Fine-grained tokens can have their permissions edited after creation
+without regenerating the token string — go to the token's settings page,
+adjust permissions, and save. This is faster than revoking and
+re-pasting a new token, and was used mid-session to add
+`Pull requests: write` to an existing token after a PR-creation call
+failed with a 403.
+
 
 - An empty repository has no default branch history, so the very first
   push became the de facto default branch. This was fixed by explicitly
