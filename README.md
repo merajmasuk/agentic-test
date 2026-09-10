@@ -5,3 +5,6 @@ design in chat → single write pass → commit → push to a dedicated
 branch → pull request for review.
 
 This file was created by Claude as part of that test run.
+
+See [HOW-TO.md](./HOW-TO.md) for a step-by-step walkthrough of how this
+workflow was carried out.
